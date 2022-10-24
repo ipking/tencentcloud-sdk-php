@@ -72,7 +72,7 @@ class Client{
 	/**
 	 * @param string $uri
 	 * @param array $requestOptions
-	 * @return array
+	 * @return Response
 	 * @throws HttpException
 	 */
 	public function get($uri, $requestOptions = []){
@@ -98,14 +98,14 @@ class Client{
 			}
 		}
 		
-		list($response_body) = $this->client_response;
-		return $response_body;
+		list($response_body,$response_code,$header_assoc) = $this->client_response;
+		return new Response($response_body,$response_code,$header_assoc);
 	}
 	
 	/**
 	 * @param string $uri
 	 * @param array $requestOptions
-	 * @return array
+	 * @return Response
 	 * @throws HttpException
 	 */
 	public function post($uri, $requestOptions = []){
@@ -137,7 +137,7 @@ class Client{
 			}
 		}
 		
-		list($response_body) = $this->client_response;
-		return $response_body;
+		list($response_body,$response_code,$header_assoc) = $this->client_response;
+		return new Response($response_body,$response_code,$header_assoc);
 	}
 }
