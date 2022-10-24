@@ -81,8 +81,12 @@ class Client{
 		$this->method = self::METHOD_GET;
 		$this->headers = $requestOptions['headers'];
 		
+		if ($requestOptions['query']) {
+			$this->url .= '?'.http_build_query($requestOptions['query']);
+		}
+		
 		$header_arr = [];
-		foreach($this->headers as $key => $item){
+		foreach($this->headers?:[] as $key => $item){
 			$header_arr[] = $key.': '.$item;
 		}
 		$opt = array(
@@ -115,6 +119,9 @@ class Client{
 		$this->headers = $requestOptions['headers'];
 		if($requestOptions['body']){
 			$this->data = $requestOptions['body'];
+		}
+		if($requestOptions['form_params']){
+			$this->data = $requestOptions['form_params'];
 		}
 		
 		$header_arr = [];
