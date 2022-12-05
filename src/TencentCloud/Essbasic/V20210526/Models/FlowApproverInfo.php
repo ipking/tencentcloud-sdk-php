@@ -21,27 +21,27 @@ use TencentCloud\Common\AbstractModel;
  * 创建签署流程签署人入参。
 
 其中签署方FlowApproverInfo需要传递的参数
-非单C、单B、B2C合同，ApproverType、RecipientId（模版发起合同时）必传，建议都传。其他身份标识
+非单C、单B、B2C合同，ApproverType、RecipientId（模板发起合同时）必传，建议都传。其他身份标识
 1-个人：Name、Mobile必传
 2-渠道子客企业指定经办人：OpenId必传，OrgName必传、OrgOpenId必传；
 3-渠道合作企业不指定经办人：（暂不支持）
 4-非渠道合作企业：Name、Mobile必传，OrgName必传，且NotChannelOrganization=True。
 
 RecipientId参数：
-从DescribeTemplates接口中，可以得到模版下的签署方Recipient列表，根据模版自定义的Rolename在此结构体中确定其RecipientId
+从DescribeTemplates接口中，可以得到模板下的签署方Recipient列表，根据模板自定义的Rolename在此结构体中确定其RecipientId
  *
  * @method string getName() 获取签署人姓名，最大长度50个字符
  * @method void setName(string $Name) 设置签署人姓名，最大长度50个字符
- * @method string getIdCardType() 获取经办人身份证件类型
+ * @method string getIdCardType() 获取签署人身份证件类型
 1.ID_CARD 居民身份证
 2.HONGKONG_MACAO_AND_TAIWAN 港澳台居民居住证
 3.HONGKONG_AND_MACAO 港澳居民来往内地通行证
- * @method void setIdCardType(string $IdCardType) 设置经办人身份证件类型
+ * @method void setIdCardType(string $IdCardType) 设置签署人身份证件类型
 1.ID_CARD 居民身份证
 2.HONGKONG_MACAO_AND_TAIWAN 港澳台居民居住证
 3.HONGKONG_AND_MACAO 港澳居民来往内地通行证
- * @method string getIdCardNumber() 获取经办人证件号
- * @method void setIdCardNumber(string $IdCardNumber) 设置经办人证件号
+ * @method string getIdCardNumber() 获取签署人证件号
+ * @method void setIdCardNumber(string $IdCardNumber) 设置签署人证件号
  * @method string getMobile() 获取签署人手机号，脱敏显示。大陆手机号为11位，暂不支持海外手机号。
  * @method void setMobile(string $Mobile) 设置签署人手机号，脱敏显示。大陆手机号为11位，暂不支持海外手机号。
  * @method string getOrganizationName() 获取企业签署方工商营业执照上的企业名称，签署方为非发起方企业场景下必传，最大长度64个字符；
@@ -51,19 +51,21 @@ RecipientId参数：
  * @method void setNotChannelOrganization(boolean $NotChannelOrganization) 设置指定签署人非渠道企业下员工，在ApproverType为ORGANIZATION时指定。
 默认为false，即签署人位于同一个渠道应用号下；
  * @method string getOpenId() 获取用户侧第三方id，最大长度64个字符
+当签署方为同一渠道下的员工时，该字段若不指定，则发起【待领取】的流程
  * @method void setOpenId(string $OpenId) 设置用户侧第三方id，最大长度64个字符
+当签署方为同一渠道下的员工时，该字段若不指定，则发起【待领取】的流程
  * @method string getOrganizationOpenId() 获取企业签署方在同一渠道下的其他合作企业OpenId，签署方为非发起方企业场景下必传，最大长度64个字符；
  * @method void setOrganizationOpenId(string $OrganizationOpenId) 设置企业签署方在同一渠道下的其他合作企业OpenId，签署方为非发起方企业场景下必传，最大长度64个字符；
  * @method string getApproverType() 获取签署人类型，PERSON-个人；
 PERSON_AUTO_SIGN-个人自动签；
 ORGANIZATION-企业；
 ENTERPRISESERVER-企业静默签;
-注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；并且仅能指定发起方企业签署方为静默签署；
+注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；
  * @method void setApproverType(string $ApproverType) 设置签署人类型，PERSON-个人；
 PERSON_AUTO_SIGN-个人自动签；
 ORGANIZATION-企业；
 ENTERPRISESERVER-企业静默签;
-注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；并且仅能指定发起方企业签署方为静默签署；
+注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；
  * @method string getRecipientId() 获取签署流程签署人在模板中对应的签署人Id；在非单方签署、以及非B2C签署的场景下必传，用于指定当前签署方在签署流程中的位置；
  * @method void setRecipientId(string $RecipientId) 设置签署流程签署人在模板中对应的签署人Id；在非单方签署、以及非B2C签署的场景下必传，用于指定当前签署方在签署流程中的位置；
  * @method integer getDeadline() 获取签署截止时间，默认一年
@@ -78,6 +80,10 @@ ENTERPRISESERVER-企业静默签;
  * @method void setPreReadTime(integer $PreReadTime) 设置合同的强制预览时间：3~300s，未指定则按合同页数计算
  * @method string getJumpUrl() 获取签署完前端跳转的url，暂未使用
  * @method void setJumpUrl(string $JumpUrl) 设置签署完前端跳转的url，暂未使用
+ * @method ApproverOption getApproverOption() 获取签署人个性化能力值
+ * @method void setApproverOption(ApproverOption $ApproverOption) 设置签署人个性化能力值
+ * @method boolean getApproverNeedSignReview() 获取当前签署方进行签署操作是否需要企业内部审批，true 则为需要
+ * @method void setApproverNeedSignReview(boolean $ApproverNeedSignReview) 设置当前签署方进行签署操作是否需要企业内部审批，true 则为需要
  */
 class FlowApproverInfo extends AbstractModel
 {
@@ -87,7 +93,7 @@ class FlowApproverInfo extends AbstractModel
     public $Name;
 
     /**
-     * @var string 经办人身份证件类型
+     * @var string 签署人身份证件类型
 1.ID_CARD 居民身份证
 2.HONGKONG_MACAO_AND_TAIWAN 港澳台居民居住证
 3.HONGKONG_AND_MACAO 港澳居民来往内地通行证
@@ -95,7 +101,7 @@ class FlowApproverInfo extends AbstractModel
     public $IdCardType;
 
     /**
-     * @var string 经办人证件号
+     * @var string 签署人证件号
      */
     public $IdCardNumber;
 
@@ -117,6 +123,7 @@ class FlowApproverInfo extends AbstractModel
 
     /**
      * @var string 用户侧第三方id，最大长度64个字符
+当签署方为同一渠道下的员工时，该字段若不指定，则发起【待领取】的流程
      */
     public $OpenId;
 
@@ -130,7 +137,7 @@ class FlowApproverInfo extends AbstractModel
 PERSON_AUTO_SIGN-个人自动签；
 ORGANIZATION-企业；
 ENTERPRISESERVER-企业静默签;
-注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；并且仅能指定发起方企业签署方为静默签署；
+注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；
      */
     public $ApproverType;
 
@@ -170,23 +177,34 @@ ENTERPRISESERVER-企业静默签;
     public $JumpUrl;
 
     /**
+     * @var ApproverOption 签署人个性化能力值
+     */
+    public $ApproverOption;
+
+    /**
+     * @var boolean 当前签署方进行签署操作是否需要企业内部审批，true 则为需要
+     */
+    public $ApproverNeedSignReview;
+
+    /**
      * @param string $Name 签署人姓名，最大长度50个字符
-     * @param string $IdCardType 经办人身份证件类型
+     * @param string $IdCardType 签署人身份证件类型
 1.ID_CARD 居民身份证
 2.HONGKONG_MACAO_AND_TAIWAN 港澳台居民居住证
 3.HONGKONG_AND_MACAO 港澳居民来往内地通行证
-     * @param string $IdCardNumber 经办人证件号
+     * @param string $IdCardNumber 签署人证件号
      * @param string $Mobile 签署人手机号，脱敏显示。大陆手机号为11位，暂不支持海外手机号。
      * @param string $OrganizationName 企业签署方工商营业执照上的企业名称，签署方为非发起方企业场景下必传，最大长度64个字符；
      * @param boolean $NotChannelOrganization 指定签署人非渠道企业下员工，在ApproverType为ORGANIZATION时指定。
 默认为false，即签署人位于同一个渠道应用号下；
      * @param string $OpenId 用户侧第三方id，最大长度64个字符
+当签署方为同一渠道下的员工时，该字段若不指定，则发起【待领取】的流程
      * @param string $OrganizationOpenId 企业签署方在同一渠道下的其他合作企业OpenId，签署方为非发起方企业场景下必传，最大长度64个字符；
      * @param string $ApproverType 签署人类型，PERSON-个人；
 PERSON_AUTO_SIGN-个人自动签；
 ORGANIZATION-企业；
 ENTERPRISESERVER-企业静默签;
-注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；并且仅能指定发起方企业签署方为静默签署；
+注：ENTERPRISESERVER 类型仅用于使用文件创建签署流程（ChannelCreateFlowByFiles）接口；
      * @param string $RecipientId 签署流程签署人在模板中对应的签署人Id；在非单方签署、以及非B2C签署的场景下必传，用于指定当前签署方在签署流程中的位置；
      * @param integer $Deadline 签署截止时间，默认一年
      * @param string $CallbackUrl 签署完回调url，最大长度1000个字符
@@ -194,6 +212,8 @@ ENTERPRISESERVER-企业静默签;
      * @param array $ComponentLimitType 个人签署方指定签署控件类型，目前仅支持：OCR_ESIGN(AI智慧手写签名)
      * @param integer $PreReadTime 合同的强制预览时间：3~300s，未指定则按合同页数计算
      * @param string $JumpUrl 签署完前端跳转的url，暂未使用
+     * @param ApproverOption $ApproverOption 签署人个性化能力值
+     * @param boolean $ApproverNeedSignReview 当前签署方进行签署操作是否需要企业内部审批，true 则为需要
      */
     function __construct()
     {
@@ -275,6 +295,15 @@ ENTERPRISESERVER-企业静默签;
 
         if (array_key_exists("JumpUrl",$param) and $param["JumpUrl"] !== null) {
             $this->JumpUrl = $param["JumpUrl"];
+        }
+
+        if (array_key_exists("ApproverOption",$param) and $param["ApproverOption"] !== null) {
+            $this->ApproverOption = new ApproverOption();
+            $this->ApproverOption->deserialize($param["ApproverOption"]);
+        }
+
+        if (array_key_exists("ApproverNeedSignReview",$param) and $param["ApproverNeedSignReview"] !== null) {
+            $this->ApproverNeedSignReview = $param["ApproverNeedSignReview"];
         }
     }
 }

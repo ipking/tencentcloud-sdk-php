@@ -18,41 +18,30 @@ namespace TencentCloud\Essbasic\V20210526\Models;
 use TencentCloud\Common\AbstractModel;
 
 /**
- * ChannelDescribeEmployees请求参数结构体
+ * ChannelDescribeOrganizationSeals请求参数结构体
  *
- * @method integer getLimit() 获取返回最大数量，最大为20
- * @method void setLimit(integer $Limit) 设置返回最大数量，最大为20
  * @method Agent getAgent() 获取渠道应用相关信息。 此接口Agent.ProxyOrganizationOpenId、Agent. ProxyOperator.OpenId、Agent.AppId 和 Agent.ProxyAppId 均必填。
  * @method void setAgent(Agent $Agent) 设置渠道应用相关信息。 此接口Agent.ProxyOrganizationOpenId、Agent. ProxyOperator.OpenId、Agent.AppId 和 Agent.ProxyAppId 均必填。
- * @method array getFilters() 获取查询过滤实名用户，Key为Status，Values为["IsVerified"]
-根据第三方系统openId过滤查询员工时,Key为StaffOpenId,Values为["OpenId","OpenId",...]
-查询离职员工时，Key为Status，Values为["QuiteJob"]
- * @method void setFilters(array $Filters) 设置查询过滤实名用户，Key为Status，Values为["IsVerified"]
-根据第三方系统openId过滤查询员工时,Key为StaffOpenId,Values为["OpenId","OpenId",...]
-查询离职员工时，Key为Status，Values为["QuiteJob"]
+ * @method integer getLimit() 获取返回最大数量，最大为100
+ * @method void setLimit(integer $Limit) 设置返回最大数量，最大为100
  * @method integer getOffset() 获取偏移量，默认为0，最大为20000
  * @method void setOffset(integer $Offset) 设置偏移量，默认为0，最大为20000
- * @method UserInfo getOperator() 获取操作者的信息
- * @method void setOperator(UserInfo $Operator) 设置操作者的信息
+ * @method integer getInfoType() 获取查询信息类型，为1时返回授权用户，为其他值时不返回
+ * @method void setInfoType(integer $InfoType) 设置查询信息类型，为1时返回授权用户，为其他值时不返回
+ * @method string getSealId() 获取印章id（没有输入返回所有）
+ * @method void setSealId(string $SealId) 设置印章id（没有输入返回所有）
  */
-class ChannelDescribeEmployeesRequest extends AbstractModel
+class ChannelDescribeOrganizationSealsRequest extends AbstractModel
 {
-    /**
-     * @var integer 返回最大数量，最大为20
-     */
-    public $Limit;
-
     /**
      * @var Agent 渠道应用相关信息。 此接口Agent.ProxyOrganizationOpenId、Agent. ProxyOperator.OpenId、Agent.AppId 和 Agent.ProxyAppId 均必填。
      */
     public $Agent;
 
     /**
-     * @var array 查询过滤实名用户，Key为Status，Values为["IsVerified"]
-根据第三方系统openId过滤查询员工时,Key为StaffOpenId,Values为["OpenId","OpenId",...]
-查询离职员工时，Key为Status，Values为["QuiteJob"]
+     * @var integer 返回最大数量，最大为100
      */
-    public $Filters;
+    public $Limit;
 
     /**
      * @var integer 偏移量，默认为0，最大为20000
@@ -60,18 +49,21 @@ class ChannelDescribeEmployeesRequest extends AbstractModel
     public $Offset;
 
     /**
-     * @var UserInfo 操作者的信息
+     * @var integer 查询信息类型，为1时返回授权用户，为其他值时不返回
      */
-    public $Operator;
+    public $InfoType;
 
     /**
-     * @param integer $Limit 返回最大数量，最大为20
+     * @var string 印章id（没有输入返回所有）
+     */
+    public $SealId;
+
+    /**
      * @param Agent $Agent 渠道应用相关信息。 此接口Agent.ProxyOrganizationOpenId、Agent. ProxyOperator.OpenId、Agent.AppId 和 Agent.ProxyAppId 均必填。
-     * @param array $Filters 查询过滤实名用户，Key为Status，Values为["IsVerified"]
-根据第三方系统openId过滤查询员工时,Key为StaffOpenId,Values为["OpenId","OpenId",...]
-查询离职员工时，Key为Status，Values为["QuiteJob"]
+     * @param integer $Limit 返回最大数量，最大为100
      * @param integer $Offset 偏移量，默认为0，最大为20000
-     * @param UserInfo $Operator 操作者的信息
+     * @param integer $InfoType 查询信息类型，为1时返回授权用户，为其他值时不返回
+     * @param string $SealId 印章id（没有输入返回所有）
      */
     function __construct()
     {
@@ -86,31 +78,25 @@ class ChannelDescribeEmployeesRequest extends AbstractModel
         if ($param === null) {
             return;
         }
-        if (array_key_exists("Limit",$param) and $param["Limit"] !== null) {
-            $this->Limit = $param["Limit"];
-        }
-
         if (array_key_exists("Agent",$param) and $param["Agent"] !== null) {
             $this->Agent = new Agent();
             $this->Agent->deserialize($param["Agent"]);
         }
 
-        if (array_key_exists("Filters",$param) and $param["Filters"] !== null) {
-            $this->Filters = [];
-            foreach ($param["Filters"] as $key => $value){
-                $obj = new Filter();
-                $obj->deserialize($value);
-                array_push($this->Filters, $obj);
-            }
+        if (array_key_exists("Limit",$param) and $param["Limit"] !== null) {
+            $this->Limit = $param["Limit"];
         }
 
         if (array_key_exists("Offset",$param) and $param["Offset"] !== null) {
             $this->Offset = $param["Offset"];
         }
 
-        if (array_key_exists("Operator",$param) and $param["Operator"] !== null) {
-            $this->Operator = new UserInfo();
-            $this->Operator->deserialize($param["Operator"]);
+        if (array_key_exists("InfoType",$param) and $param["InfoType"] !== null) {
+            $this->InfoType = $param["InfoType"];
+        }
+
+        if (array_key_exists("SealId",$param) and $param["SealId"] !== null) {
+            $this->SealId = $param["SealId"];
         }
     }
 }
